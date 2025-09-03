@@ -1,75 +1,30 @@
-{% extends 'base.html' %}
 {% load custom_filters %}
 
-{% block title %}My Notes - Notes App{% endblock %}
+<h1>Welcome to Your Notes Application</h1>
 
-{% block content %}
-<div class="row justify-content-center">
-  <div class="col-lg-8 col-md-10">
-    <div class="notes-container">
-      <h1 class="main-title">
-        <i class="bi bi-journal-plus"></i>
-        Welcome to Your Notes Application
-      </h1>
+<form method="post">
+  {% csrf_token %}
+  <label for="notes-input">Add a New Note</label>
+  <textarea
+          name="notes-input"
+          id="notes-input"
+          placeholder="Write your note here..."
+          required
+  ></textarea>
+  <button type="submit" name="add">Add Note</button>
+</form>
 
-      <!-- Add Note Form -->
-      <div class="add-note-form">
-        <form method="post">
-          {% csrf_token %}
-          <div class="mb-3">
-            <label for="notes-input" class="form-label fw-bold">
-              <i class="bi bi-pencil-square"></i> Add a New Note
-            </label>
-            <textarea 
-              name="notes-input" 
-              id="notes-input"
-              class="form-control" 
-              placeholder="Write your note here..."
-              required
-            ></textarea>
-          </div>
-          <div class="d-grid">
-            <button type="submit" name="add" class="btn btn-primary btn-lg">
-              <i class="bi bi-plus-circle"></i> Add Note
-            </button>
-          </div>
-        </form>
-      </div>
+<h3>Your Notes {% if notes %}({{ notes|length }}){% endif %}</h3>
 
-      <!-- Notes Display -->
-      <div class="notes-section">
-        <h3 class="mb-3">
-          <i class="bi bi-list-ul"></i> 
-          Your Notes 
-          {% if notes %}
-            <span class="badge bg-secondary">{{ notes|length }}</span>
-          {% endif %}
-        </h3>
-
-        {% if notes %}
-          {% for note in notes %}
-            <div class="note-item">
-              {% if note|check_slash == True %}
-                {% for word in note|list_converter %}
-                  <h5 class="note-text">
-                    <i class="bi bi-arrow-right-circle"></i> {{ word }}
-                  </h5>
-                {% endfor %}
-              {% else %}
-                <h5 class="note-text">
-                  <i class="bi bi-sticky"></i> {{ note }}
-                </h5>
-              {% endif %}
-            </div>
-          {% endfor %}
-        {% else %}
-          <div class="no-notes">
-            <i class="bi bi-journal-x" style="font-size: 3rem; color: #dee2e6;"></i>
-            <p class="mt-2">No notes yet. Add your first note above!</p>
-          </div>
-        {% endif %}
-      </div>
-    </div>
-  </div>
-</div>
-{% endblock %}
+{% if notes %}
+  {% for note in notes %}
+    <hr/>
+    {% if note|check_slash == True %}
+      {% for word in note|list_converter %}
+        <h5>{{ word }}</h5>
+      {% endfor %}
+    {% else %}
+      <h5>{{ note }}</h5>
+    {% endif %}
+  {% endfor %}
+{% endif %}
