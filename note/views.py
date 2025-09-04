@@ -16,6 +16,13 @@ def home_page(request):
             print(new_note)
             print(notes)
 
+        if "delete" in request.POST:
+            note_index = int(request.POST.get("delete"))
+
+            notes.remove(notes[note_index])
+
+            print(notes)
+
     return render(
         request,
         template_name="index.html",

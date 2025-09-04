@@ -1,30 +1,40 @@
-{% load custom_filters %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Notes</title>
+  </head>
+  <body>
+    {% load custom_filters %}
+    <h1>Welcome to Your Notes Application</h1>
+    <h3>Your Notes {% if notes %}({{ notes|length }}){% endif %}</h3>
+    <form method="post">
+      {% csrf_token %}
+      <label for="notes-input">Add a New Note</label>
+      <textarea
+              name="notes-input"
+              id="notes-input"
+              placeholder="Write your note here..."
+      ></textarea>
+      <button type="submit" name="add">Add Note</button>
+      {% if notes %}
+        {% for note in notes %}
+          <hr/>
+          {% if note|check_slash == True %}
+            {% for word in note|list_converter %}
+            0  <h5>{{ word }}</h5>
+            {% endfor %}
+          {% else %}
+            <h5>{{ note }}</h5>
+          {% endif %}
+          <button type="submit" name="delete" value="{{ note|index_item:notes }}">Delete</button>
+          <button type="submit" name="rename" value="{{ note|index_item:notes }}">Rename</button>
+        {% endfor %}
+      {% endif %}
+    </form>
+  </body>
+</html>
 
-<h1>Welcome to Your Notes Application</h1>
 
-<form method="post">
-  {% csrf_token %}
-  <label for="notes-input">Add a New Note</label>
-  <textarea
-          name="notes-input"
-          id="notes-input"
-          placeholder="Write your note here..."
-          required
-  ></textarea>
-  <button type="submit" name="add">Add Note</button>
-</form>
 
-<h3>Your Notes {% if notes %}({{ notes|length }}){% endif %}</h3>
-
-{% if notes %}
-  {% for note in notes %}
-    <hr/>
-    {% if note|check_slash == True %}
-      {% for word in note|list_converter %}
-        <h5>{{ word }}</h5>
-      {% endfor %}
-    {% else %}
-      <h5>{{ note }}</h5>
-    {% endif %}
-  {% endfor %}
-{% endif %}

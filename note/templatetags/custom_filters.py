@@ -88,3 +88,7 @@ def list_converter(value: str):
         else:
             final.append(item)
     return final
+
+@register.filter(name="index_item")
+def index_item(value:str, list_name:list):
+    return list_name.index(value)
