@@ -23,7 +23,7 @@
           <hr/>
           {% if note|check_slash == True %}
             {% for word in note|list_converter %}
-            0  <h5>{{ word }}</h5>
+              <h5>{{ word }}</h5>
             {% endfor %}
           {% else %}
             <h5>{{ note }}</h5>
